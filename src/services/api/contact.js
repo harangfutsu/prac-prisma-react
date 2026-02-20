@@ -10,7 +10,7 @@ export const createContact = (payload) =>
     api.post("/contact", payload).then((r) => r.data.data)
 
 export const updateContact = (id, payload) =>
-    api.put(`/contact/${id}`, payload).then((r) => r.data.data)
+    api.patch(`/contact/${id}`, payload).then((r) => r.data.data)
 
 export const deleteContact = (id) =>
     api.delete(`/contact/${id}`).then((r) => r.data.data)
