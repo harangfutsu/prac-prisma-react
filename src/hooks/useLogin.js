@@ -1,29 +1,24 @@
-import { useDispatch } from "react-redux";
-import { loginUserData } from "../store/redux/userReducer";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import useAuthStore from "../store/userStore";
 
 export const useLogin = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
+  const login = useAuthStore((s) => s.login);
+  const loading = useAuthStore((s) => s.loading);
+  const navigate = useNavigate();
 
-    const loginUser = async (formData) => {
-        setLoading(true);
-        setMessage("");
+  const [message, setMessage] = useState("");
 
-        try {
-        const res = await dispatch(loginUserData(formData)).unwrap();
-        setMessage(`✅ ${res.message}`);
-        // pindah ke halaman home setelah login berhasil
-        setTimeout(() => navigate("/home"), 2000);
-        } catch (err) {
-        setMessage(`❌ ${err}`);
-        } finally {
-        setLoading(false);
-        }
-    };
+  const loginUser = async (formData) => {
+    setMessage("");
+    try {
+      const res = await login(formData);
+      setMessage(`✅ ${res.message}`);
+      setTimeout(() => navigate("/contact"), 2000);
+    } catch (err) {
+      setMessage(`❌ ${err}`);
+    }
+  };
 
-    return { loginUser, loading, message };
+  return { loginUser, loading, message };
 };

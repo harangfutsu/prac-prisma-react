@@ -1,6 +1,6 @@
 import { Outlet } from "react-router"
 
-const HomeLayout = () => {
+const ContactLayout = () => {
     return (
         <div>
             <Outlet/>
@@ -8,4 +8,4 @@ const HomeLayout = () => {
     )
 }
 
-export default HomeLayout
+export default ContactLayout

@@ -1,34 +1,24 @@
-import { useDispatch } from "react-redux";
-import { createUserData } from "../store/redux/userReducer";
 import { useNavigate } from "react-router";
 import { useState } from "react";
+import useAuthStore from "../store/userStore";
 
 export const useRegister = () => {
+  const register = useAuthStore((s) => s.register);
+  const loading = useAuthStore((s) => s.loading);
+  const navigate = useNavigate();
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+  const [message, setMessage] = useState("");
 
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
-
-    const registerUser = async (formData) => {
-        setLoading(true);
-        setMessage("");
-
-        try {
-        const res = await dispatch(createUserData(formData)).unwrap();
-        setMessage(`✅ ${res.message}`);
-
-        // pindah ke login setelah 3 detik
-        setTimeout(() => navigate("/login"), 5000);
-        } catch (err) {
-        setMessage(`❌ ${err}`);
-        } finally {
-        setLoading(false);
-        }
-
+  const registerUser = async (formData) => {
+    setMessage("");
+    try {
+      const res = await register(formData);
+      setMessage(`✅ ${res.message}`);
+      setTimeout(() => navigate("/login"), 3000);
+    } catch (err) {
+      setMessage(`❌ ${err}`);
     }
+  };
 
-    return { registerUser, loading, message };
-
-}
+  return { registerUser, loading, message };
+};
